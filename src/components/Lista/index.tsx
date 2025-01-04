@@ -9,28 +9,36 @@ const ListaRenderizada = () => {
   );
   const dispatch = useDispatch();
 
-  const handleChangleCheckBox = (index: number) => {
+  const handleChangeCheckBox = (index: number) => {
     dispatch(changeCheckbox(index));
   };
 
-  const filteredTasks = tasklist.filter((_, index) =>
-    filter === "all"
-      ? true //todas tarefas incuidas
-      : filter === "completed"
-      ? tasklistBoolean[index] //retorna os valores correspondentes que forem true
-      : !tasklistBoolean[index] // se nada acontecer retorna os false
-  );
+  const filteredTasks = tasklist
+    .map((task, index) => ({ task, isChecked: tasklistBoolean[index], index })) // cria um array em que cada item é  { task: "Tarefa 1", isChecked: true, index: 0 },
+    .filter(({ isChecked }) => //agora filtra levando em consideração o checked
+      filter === "all"
+        ? true
+        : filter === "completed"
+        ? isChecked
+        : !isChecked
+    );
+
 
   return (
     <Lista>
-      {filteredTasks.map((item, index) => (
-        <li key={index}>
+      {filteredTasks.map(({task, isChecked, index}) => (
+        <li key={index}
+        style={{
+          color: isChecked ? "#c1c1c1" : "black",
+          textDecoration: isChecked ? "line-through" : "none",
+        }}
+        >
           <input
             type="checkbox"
-            checked={tasklistBoolean[index]}
-            onChange={() => handleChangleCheckBox(index)}
+            checked={isChecked}
+            onChange={() => handleChangeCheckBox(index)}
           />
-          {item}
+          {task}
         </li>
       ))}
     </Lista>

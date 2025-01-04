@@ -13,13 +13,6 @@ export const Lista = styled.ul `
     list-style: none;
     
   }
-  .completed{
-    color: #c1c1c1;
-    text-decoration: line-through;
-  }
-  .pending{
-    color: #000;
-  }
 
 `
 
