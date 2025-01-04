@@ -1,35 +1,48 @@
-
-import { TaskAction } from "./action" //importação da tipagem de TaskAction
+import { TaskAction } from "./action"; //importação da tipagem de TaskAction
 
 //Tipagem do estado
-interface TaskState  {
-  tasklist: string[],
-  tasklistBoolean: boolean[],
+interface TaskState {
+  tasklist: string[];
+  tasklistBoolean: boolean[];
+  filter: string;
 }
 // Estado inicial tipado
-const initialState:TaskState = {
+const initialState: TaskState = {
   tasklist: [],
-  tasklistBoolean:[],
-}
+  tasklistBoolean: [],
+  filter:('all'),
+};
 
-const taskReducer = (state:TaskState= initialState, action:TaskAction) => {
-  switch(action.type){
+const taskReducer = (state: TaskState = initialState, action: TaskAction) => {
+  switch (action.type) {
     case "task/addTask":
-      return{
+      return {
         ...state,
-        tasklist: [...state.tasklist, action.payload]
-      }
+        tasklist: [...state.tasklist, action.payload],
+      };
     case "task/addTaskBoolean":
+      return {
+        ...state,
+        tasklistBoolean: [...state.tasklistBoolean, false],
+      };
+
+    case "task/changeCheckbox":
       return{
         ...state,
-        tasklistBoolean: [state.tasklistBoolean, action.payload]
+        tasklistBoolean: state.tasklistBoolean.map((item,index) =>
+        index === action.payload ? !item : item
+        )
       }
-  default:
-    return state
-    }
-
-  }
     
-  
+    case "task/filterTask":
+      return{
+        ...state,
+        filter:action.payload,
+      }
+      
+    default:
+      return state;
+  }
+};
 
 export default taskReducer;
